@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Education Explorer</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo span {
+            color: var(--accent-color);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 20px;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: var(--light-color);
+        }
+        
+        .hero {
+            background: linear-gradient(rgba(44, 62, 80, 0.7), rgba(44, 62, 80, 0.7)), url('https://via.placeholder.com/1200x400');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 4rem 1rem;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+        
+        .search-wrapper {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .search-container {
+            position: relative;
+        }
+        
+        .search-container input {
+            width: 100%;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        .search-container button {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .search-container button:hover {
+            background-color: #2980b9;
+        }
+        
+        .country-list {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+            position: absolute;
+            width: 100%;
+            z-index: 1000;
+            top: 60px;
+        }
+        
+        .country-list-item {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .country-list-item:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .country-list-item:last-child {
+            border-bottom: none;
+        }
+        
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 20px;
+        }
+        
+        .country-info {
+            display: none;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-top: 2rem;
+        }
+        
+        .country-header {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .country-flag {
+            width: 60px;
+            height: 40px;
+            margin-right: 15px;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        .country-name {
+            font-size: 1.8rem;
+        }
+        
+        .tabs {
+            display: flex;
+            background-color: var(--light-color);
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .tab {
+            padding: 15px 20px;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--dark-color);
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            background-color: white;
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--primary-color);
+        }
+        
+        .tab:hover:not(.active) {
+            background-color: #e3e3e3;
+        }
+        
+        .tab-content {
+            padding: 2rem;
+        }
+        
+        .tab-pane {
+            display: none;
+        }
+        
+        .tab-pane.active {
+            display: block;
+        }
+        
+        .pros-cons {
+            display: flex;
+            gap: 20px;
+            margin-top: 1.5rem;
+        }
+        
+        .pros, .cons {
+            flex: 1;
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+        
+        .pros {
+            background-color: rgba(46, 204, 113, 0.1);
+            border-left: 4px solid #2ecc71;
+        }
+        
+        .cons {
+            background-color: rgba(231, 76, 60, 0.1);
+            border-left: 4px solid #e74c3c;
+        }
+        
+        .pros h3, .cons h3 {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .pros h3::before {
+            content: "✓";
+            color: #2ecc71;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        .cons h3::before {
+            content: "✗";
+            color: #e74c3c;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        .pros ul, .cons ul {
+            padding-left: 1.5rem;
+        }
+        
+        .pros li, .cons li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 1.5rem;
+        }
+        
+        .stat-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 0.5rem 0;
+        }
+        
+        .featured-universities {
+            margin-top: 2rem;
+        }
+        
+        .university-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 1.5rem;
+        }
+        
+        .university-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .university-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+        
+        .university-details {
+            padding: 1.5rem;
+        }
+        
+        .university-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .university-location {
+            color: #777;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .university-location::before {
+            content: "📍";
+            margin-right: 5px;
+        }
+        
+        .university-details p {
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+        
+        .university-link {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: background-color 0.3s;
+        }
+        
+        .university-link:hover {
+            background-color: #2980b9;
+        }
+        
+        footer {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 2rem 0;
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+        
+        .footer-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-section h3::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--accent-color);
+        }
+        
+        .footer-section ul {
+            list-style: none;
+        }
+        
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-section ul li a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-section ul li a:hover {
+            color: white;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.9rem;
+            color: #bdc3c7;
+        }
+        
+        @media (max-width: 768px) {
+            .pros-cons {
+                flex-direction: column;
+            }
+            
+            .header-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 1rem;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .country-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .country-flag {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <span>Global</span>Education Explorer
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Countries</a></li>
+                    <li><a href="#">Resources</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <section class="hero">
+        <h1>Discover Education Opportunities Worldwide</h1>
+        <p>Find detailed information about university education, master's programs, and training opportunities in countries around the world.</p>
+        <div class="search-wrapper">
+            <div class="search-container">
+                <input type="text" id="countrySearch" placeholder="Enter a country name...">
+                <button onclick="searchCountry()">Explore</button>
+            </div>
+        </div>
+    </section>
+    
+    <main class="main-content">
+        <div id="countryInfo" class="country-info"></div>
+    </main>
+    
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>About Us</h3>
+                <ul>
+                    <li><a href="#">Our Mission</a></li>
+                    <li><a href="#">How We Work</a></li>
+                    <li><a href="#">Our Team</a></li>
+                    <li><a href="#">Testimonials</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Resources</h3>
+                <ul>
+                    <li><a href="#">Scholarship Guide</a></li>
+                    <li><a href="#">Visa Information</a></li>
+                    <li><a href="#">Cost Calculator</a></li>
+                    <li><a href="#">Application Tips</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Featured Countries</h3>
+                <ul>
+                    <li><a href="#">United States</a></li>
+                    <li><a href="#">United Kingdom</a></li>
+                    <li><a href="#">Germany</a></li>
+                    <li><a href="#">Canada</a></li>
+                    <li><a href="#">Australia</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <ul>
+                    <li><a href="#">Email Us</a></li>
+                    <li><a href="#">Support</a></li>
+                    <li><a href="#">Feedback</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 Global Education Explorer. All Rights Reserved.</p>
+        </div>
+    </footer>
+    
+    <script>
+        const countryData = {
+            "united states": {
+                name: "United States",
+                flag: "https://via.placeholder.com/60x40",
+                universityEducation: {
+                    overview: "The United States has one of the world's most prestigious higher education systems, with over 4,000 colleges and universities offering a wide variety of programs.",
+                    pros: [
+                        "World-renowned universities (Harvard, MIT, Stanford)",
+                        "Flexible education system with many course options",
+                        "Strong research opportunities and funding",
+                        "Excellent networking and career opportunities",
+                        "Diverse campus environments"
+                    ],
+                    cons: [
+                        "Very high tuition fees and living costs",
+                        "Competitive admission process for top universities",
+                        "Complex visa requirements for international students",
+                        "Significant variance in quality between institutions",
+                        "Distance from family for international students"
+                    ],
+                    stats: [
+                        {label: "Avg. Annual Tuition (Public)", value: "$25,290"},
+                        {label: "Avg. Annual Tuition (Private)", value: "$37,650"},
+                        {label: "Universities in Global Top 100", value: "46"},
+                        {label: "International Students", value: "1.1M+"}
+                    ],
+                    universities: [
+                        {
+                            name: "Harvard University",
+                            location: "Cambridge, Massachusetts",
+                            description: "Founded in 1636, Harvard is one of the most prestigious universities globally, known for excellence across disciplines.",
+                            image: "https://via.placeholder.com/300x150"
+                        },
+                        {
+                            name: "Massachusetts Institute of Technology (MIT)",
+                            location: "Cambridge, Massachusetts",
+                            description: "MIT is renowned for research and education in physical sciences, engineering, and technology.",
+                            image: "https://via.placeholder.com/300x150"
+                        },
+                        {
+                            name: "Stanford University",
+                            location: "Stanford, California",
+                            description: "Known for its entrepreneurial spirit and proximity to Silicon Valley, Stanford excels in business, engineering, and computer science.",
+                            image: "https://via.placeholder.com/300x150"
+                        }
+                    ]
+                },
+                mastersPrograms: {
+                    overview: "The U.S. offers diverse master's programs, typically lasting 1-2 years, with a focus on specialized knowledge and professional development.",
+                    pros: [
+                        "Extensive variety of specialized programs",
+                        "Strong connections with industry and employers",
+                        "Access to cutting-edge research facilities",
+                        "Opportunities for teaching and research assistantships",
+                        "Optional Practical Training (OPT) allows graduates to work in the U.S."
+                    ],
+                    cons: [
+                        "High tuition costs compared to many countries",
+                        "Competitive admissions for top programs",
+                        "Limited financial aid for international students",
+                        "Time-consuming application process (GRE, GMAT, etc.)",
+                        "Challenging work-visa situation after graduation"
+                    ],
+                    stats: [
+                        {label: "Avg. Program Duration", value: "2 Years"},
+                        {label: "Avg. Cost per Year", value: "$30,000"},
+                        {label: "Programs with Scholarships", value: "65%"},
+                        {label: "Employment Rate After Graduation", value: "89%"}
+                    ]
+                },
+                trainingOpportunities: {
+                    overview: "The U.S. offers extensive professional training opportunities across all major fields, from technology to healthcare to business.",
+                    pros: [
+                        "Wide range of internship and co-op programs",
+                        "Cutting-edge training in emerging technologies",
+                        "Strong industry-academia partnerships",
+                        "Professional certification programs recognized worldwide",
+                        "Entrepreneurship incubators and accelerators"
+                    ],
+                    cons: [
+                        "Competitive application processes",
+                        "Many unpaid internships, especially in prestigious fields",
+                        "Work authorization restrictions for international students",
+                        "Geographic concentration of opportunities in certain regions",
+                        "High cost of living in major training centers"
+                    ],
+                    stats: [
+                        {label: "Companies Offering Internships", value: "65,000+"},
+                        {label: "Average Internship Stipend", value: "$3,000/month"},
+                        {label: "Conversion to Full-Time Jobs", value: "56%"},
+                        {label: "Training Programs with Certification", value: "78%"}
+                    ]
+                }
+            },
+            "germany": {
+                name: "Germany",
+                flag: "https://via.placeholder.com/60x40",
+                universityEducation: {
+                    overview: "Germany offers high-quality education with little to no tuition fees at public universities, even for international students. The system emphasizes thorough theoretical knowledge combined with practical applications.",
+                    pros: [
+                        "Free or low-cost tuition at public universities",
+                        "High academic standards and internationally recognized degrees",
+                        "Strong emphasis on research and innovation",
+                        "Good work-study balance and student support",
+                        "No distinction between domestic and international students"
+                    ],
+                    cons: [
+                        "Most programs require German language proficiency",
+                        "Competitive admission for popular programs",
+                        "Limited course variety compared to US/UK",
+                        "More theoretical approach in some fields",
+                        "Higher living expenses in major cities"
+                    ],
+                    stats: [
+                        {label: "Public Universities Tuition", value: "€0-€1,500"},
+                        {label: "Private Universities Tuition", value: "€10,000+"},
+                        {label: "Universities in Global Top 100", value: "12"},
+                        {label: "International Students", value: "380,000+"}
+                    ],
+                    universities: [
+                        {
+                            name: "Technical University of Munich",
+                            location: "Munich, Bavaria",
+                            description: "One of Germany's leading technical universities, known for engineering, natural sciences, and technology research.",
+                            image: "https://via.placeholder.com/300x150"
+                        },
+                        {
+                            name: "Heidelberg University",
+                            location: "Heidelberg, Baden-Württemberg",
+                            description: "Germany's oldest university, with strengths in medicine, natural sciences, and humanities.",
+                            image: "https://via.placeholder.com/300x150"
+                        },
+                        {
+                            name: "Humboldt University of Berlin",
+                            location: "Berlin",
+                            description: "Historic university in the heart of Berlin with strengths in arts, humanities, and social sciences.",
+                            image: "https://via.placeholder.com/300x150"
+                        }
+                    ]
+                },
+                mastersPrograms: {
+                    overview: "Germany offers two types of master's programs: consecutive (following bachelor's in same field) and non-consecutive. Many programs are now offered in English.",
+                    pros: [
+                        "Free or very low tuition fees even for international students",
+                        "Strong emphasis on research and practical skills",
+                        "Growing number of English-taught programs",
+                        "Direct industry connections, especially in technical fields",
+                        "EU work permissions after graduation"
+                    ],
+                    cons: [
+                        "German language requirements for many programs",
+                        "Limited scholarship opportunities compared to US/UK",
+                        "Less flexibility in course selection",
+                        "Longer programs (typically 2 years)",
+                        "Winter and summer semester system can delay starts"
+                    ],
+                    stats: [
+                        {label: "Avg. Program Duration", value: "2 Years"},
+                        {label: "English-taught Programs", value: "1,300+"},
+                        {label: "Avg. Cost per Semester", value: "€300"},
+                        {label: "Job Placement Rate", value: "91%"}
+                    ]
+                },
+                trainingOpportunities: {
+                    overview: "Germany is famous for its dual education system, combining classroom learning with apprenticeships. Professional training is highly valued across industries.",
+                    pros: [
+                        "World-renowned apprenticeship system (dual education)",
+                        "Paid training opportunities with major global companies",
+                        "Strong focus on practical skills development",
+                        "Direct pathway to employment in German industry",
+                        "Highly respected vocational qualifications"
+                    ],
+                    cons: [
+                        "Requires strong German language skills",
+                        "Competitive application process for top companies",
+                        "Highly structured programs with less flexibility",
+                        "Regional differences in training opportunities",
+                        "Challenging work-life balance during training"
+                    ],
+                    stats: [
+                        {label: "Recognized Training Occupations", value: "320+"},
+                        {label: "Avg. Apprenticeship Duration", value: "3 Years"},
+                        {label: "Average Apprentice Salary", value: "€800-€1,200/month"},
+                        {label: "Employment Rate After Training", value: "95%"}
+                    ]
+                }
+            },
+            "uk": {
+                name: "United Kingdom",
+                flag: "https://via.placeholder.com/60x40",
+                universityEducation: {
+                    overview: "The UK offers prestigious and globally recognized degrees with a focus on in-depth subject knowledge and independent study. Bachelor's programs typically last 3 years in England and Wales, and 4 years in Scotland.",
+                    pros: [
+                        "Globally prestigious universities (Oxford, Cambridge, Imperial)",
+                        "Shorter bachelor's programs (3 years vs 4 in many countries)",
+                        "Strong emphasis on critical thinking and independent research",
+                        "Extensive support services for international students",
+                        "Multicultural environment with diverse student body"
+                    ],
+                    cons: [
+                        "High tuition fees, especially for international students",
+                        "Increasing living costs, particularly in London",
+                        "Post-Brexit complications for EU students",
+                        "Less flexibility in course structure than US system",
+                        "Limited work opportunities during studies"
+                    ],
+                    stats: [
+                        {label: "Int'l Student Tuition", value: "£14,000-£40,000/year"},
+                        {label: "Universities in Global Top 100", value: "18"},
+                        {label: "International Students", value: "605,000+"},
+                        {label: "Student Satisfaction", value: "83%"}
+                    ],
+                    universities: [
+                        {
+                            name: "University of Oxford",
+                            location: "Oxford, England",
+                            description: "The oldest university in the English-speaking world, known for tutorial-based teaching and research excellence.",
+                            image: "https://via.placeholder.com/300x150"
+                        },
+                        {
+                            name: "Imperial College London",
+                            location: "London, England",
+                            description: "Specializing in science, engineering, medicine, and business, with strong industry connections.",
+                            image: "https://via.placeholder.com/300x150"
+                        },
+                        {
+                            name: "University of Edinburgh",
+                            location: "Edinburgh, Scotland",
+                            description: "One of Scotland's ancient universities, with strengths in humanities, sciences, and medicine.",
+                            image: "https://via.placeholder.com/300x150"
+                        }
+                    ]
+                },
+                mastersPrograms: {
+                    overview: "UK Master's programs are known for their intensive, focused approach, typically lasting just 1 year (though some specialized programs run longer).",
+                    pros: [
+                        "Shorter duration (1 year vs 2 in many countries)",
+                        "Highly specialized and focused curriculum",
+                        "Strong research opportunities with leading academics",
+                        "Graduate Route visa allowing 2 years of work after studies",
+                        "Prestigious qualifications recognized worldwide"
+                    ],
+                    cons: [
+                        "High tuition fees (£15,000-£35,000 for international students)",
+                        "Intensive workload due to condensed timeframe",
+                        "Limited funding opportunities for international students",
+                        "High cost of living, especially in London",
+                        "Competitive admissions for top programs"
+                    ],
+                    stats: [
+                        {label: "Avg. Program Duration", value: "1 Year"},
+                        {label: "Avg. Int'l Student Tuition", value: "£22,000/year"},
+                        {label: "Programs with Scholarships", value: "40%"},
+                        {label: "Employment Rate After 6 Months", value: "86%"}
+                    ]
+                },
+                trainingOpportunities: {
+                    overview: "The UK offers various professional training options, from vocational qualifications to industry placements and professional certifications.",
+                    pros: [
+                        "Strong apprenticeship system with government backing",
+                        "Professional qualifications respected worldwide",
+                        "Industry-specific training with leading global companies",
+                        "Pathway to chartered status in many professions",
+                        "Strong emphasis on soft skills development"
+                    ],
+                    cons: [
+                        "Visa restrictions for international trainees",
+                        "Regional concentration of opportunities (London-centric)",
+                        "Competitive application process for prestigious schemes",
+                        "High cost of professional certifications",
+                        "Brexit impact on some EU-recognized qualifications"
+                    ],
+                    stats: [
+                        {label: "Apprenticeship Standards", value: "600+"},
+                        {label: "Graduate Scheme Average Salary", value: "£28,000/year"},
+                        {label: "Professional Bodies", value: "200+"},
+                        {label: "Avg. Training Program Duration", value: "18 months"}
+                    ]
+                }
+            }
+        };
+
+        const countries = Object.values(countryData);
+
+        function setupSearch() {
+            const searchInput = document.getElementById("countrySearch");
+            const searchWrapper = document.querySelector(".search-wrapper");
+            const countryList = document.createElement("div");
+            countryList.className = "country-list";
+            searchWrapper.appendChild(countryList);
+
+            searchInput.addEventListener("focus", () => {
+                filterCountries(searchInput.value);
+                countryList.style.display = "block";
+            });
+
+            searchInput.addEventListener("input", (e) => {
+                filterCountries(e.target.value);
+                countryList.style.display = "block";
+            });
+
+            document.addEventListener("click", (e) => {
+                if (!searchWrapper.contains(e.target)) {
+                    countryList.style.display = "none";
+                }
+            });
+        }
+
+        function filterCountries(searchTerm) {
+            const countryList = document.querySelector(".country-list");
+            const filteredCountries = countries.filter(country => 
+                country.name.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+
+            countryList.innerHTML = "";
+            if (filteredCountries.length > 0) {
+                filteredCountries.forEach(country => {
+                    const item = document.createElement("div");
+                    item.className = "country-list-item";
+                    item.textContent = country.name;
+                    item.addEventListener("click", () => {
+                        document.getElementById("countrySearch").value = country.name;
+                        displayCountryInfo(country);
+                        countryList.style.display = "none";
+                    });
+                    countryList.appendChild(item);
+                });
+            } else {
+                const item = document.createElement("div");
+                item.className = "country-list-item";
+                item.textContent = "No countries found";
+                countryList.appendChild(item);
+            }
+        }
+
+        function searchCountry() {
+            const searchInput = document.getElementById("countrySearch").value.toLowerCase();
+            const country = countries.find(c => c.name.toLowerCase() === searchInput);
+            const countryInfoDiv = document.getElementById("countryInfo");
+            
+            if (country) {
+                displayCountryInfo(country);
+            } else {
+                countryInfoDiv.style.display = "block";
+                countryInfoDiv.innerHTML = "<p>No information found for this country.</p>";
+            }
+        }
+
+        function displayCountryInfo(country) {
+            const countryInfoDiv = document.getElementById("countryInfo");
+            countryInfoDiv.style.display = "block";
+            
+            countryInfoDiv.innerHTML = `
+                <div class="country-header">
+                    <img src="${country.flag}" alt="${country.name} flag" class="country-flag">
+                    <h2 class="country-name">${country.name}</h2>
+                </div>
+                <div class="tabs">
+                    <div class="tab active" onclick="changeTab(event, 'university')">University Education</div>
+                    <div class="tab" onclick="changeTab(event, 'masters')">Master's Programs</div>
+                    <div class="tab" onclick="changeTab(event, 'training')">Training Opportunities</div>
+                </div>
+                <div class="tab-content">
+                    <div id="university" class="tab-pane active">
+                        <h2>University Education in ${country.name}</h2>
+                        <p>${country.universityEducation.overview}</p>
+                        <div class="pros-cons">
+                            <div class="pros">
+                                <h3>Advantages</h3>
+                                <ul>${country.universityEducation.pros.map(pro => `<li>${pro}</li>`).join('')}</ul>
+                            </div>
+                            <div class="cons">
+                                <h3>Disadvantages</h3>
+                                <ul>${country.universityEducation.cons.map(con => `<li>${con}</li>`).join('')}</ul>
+                            </div>
+                        </div>
+                        <div class="stat-cards">
+                            ${country.universityEducation.stats.map(stat => `
+                                <div class="stat-card">
+                                    <h4>${stat.label}</h4>
+                                    <div class="stat-value">${stat.value}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="featured-universities">
+                            <h3>Featured Universities</h3>
+                            <div class="university-grid">
+                                ${country.universityEducation.universities.map(uni => `
+                                    <div class="university-card">
+                                        <img src="${uni.image}" alt="${uni.name}" class="university-image">
+                                        <div class="university-details">
+                                            <h4 class="university-name">${uni.name}</h4>
+                                            <div class="university-location">${uni.location}</div>
+                                            <p>${uni.description}</p>
+                                            <a href="#" class="university-link">Learn More</a>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                    <div id="masters" class="tab-pane">
+                        <h2>Master's Programs in ${country.name}</h2>
+                        <p>${country.mastersPrograms.overview}</p>
+                        <div class="pros-cons">
+                            <div class="pros">
+                                <h3>Advantages</h3>
+                                <ul>${country.mastersPrograms.pros.map(pro => `<li>${pro}</li>`).join('')}</ul>
+                            </div>
+                            <div class="cons">
+                                <h3>Disadvantages</h3>
+                                <ul>${country.mastersPrograms.cons.map(con => `<li>${con}</li>`).join('')}</ul>
+                            </div>
+                        </div>
+                        <div class="stat-cards">
+                            ${country.mastersPrograms.stats.map(stat => `
+                                <div class="stat-card">
+                                    <h4>${stat.label}</h4>
+                                    <div class="stat-value">${stat.value}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div id="training" class="tab-pane">
+                        <h2>Training Opportunities in ${country.name}</h2>
+                        <p>${country.trainingOpportunities.overview}</p>
+                        <div class="pros-cons">
+                            <div class="pros">
+                                <h3>Advantages</h3>
+                                <ul>${country.trainingOpportunities.pros.map(pro => `<li>${pro}</li>`).join('')}</ul>
+                            </div>
+                            <div class="cons">
+                                <h3>Disadvantages</h3>
+                                <ul>${country.trainingOpportunities.cons.map(con => `<li>${con}</li>`).join('')}</ul>
+                            </div>
+                        </div>
+                        <div class="stat-cards">
+                            ${country.trainingOpportunities.stats.map(stat => `
+                                <div class="stat-card">
+                                    <h4>${stat.label}</h4>
+                                    <div class="stat-value">${stat.value}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function changeTab(event, tabName) {
+            const tabs = document.querySelectorAll(".tab");
+            const tabPanes = document.querySelectorAll(".tab-pane");
+
+            tabs.forEach(tab => tab.classList.remove("active"));
+            tabPanes.forEach(pane => pane.classList.remove("active"));
+
+            event.target.classList.add("active");
+            document.getElementById(tabName).classList.add("active");
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            setupSearch();
+        });
+    </script>
+</body>
+</html>
